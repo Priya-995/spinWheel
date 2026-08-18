@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>Tiffexx | Spin the Rakhi Wheel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --maroon-deep: #210705;
+            --maroon: #4a1410;
+            --maroon-light: #6f2419;
+            --gold: #e8b54d;
+            --gold-bright: #f6d477;
+            --marigold: #e8641c;
+            --thread-red: #c1272d;
+            --cream: #fff6e9;
+            --cream-dim: #f0dfc6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--maroon-deep);
+            color: var(--cream);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background:
+                radial-gradient(ellipse at 50% -10%, var(--maroon-light) 0%, var(--maroon) 38%, var(--maroon-deep) 78%);
+            padding: 28px 16px 60px;
+        }
+
+        /* ambient marigold petals */
+        .petal {
+            position: fixed;
+            top: -40px;
+            width: 14px;
+            height: 14px;
+            background: var(--marigold);
+            border-radius: 0 60% 0 60%;
+            opacity: .55;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-5vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(340deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .petal {
+                display: none;
+            }
+        }
+
+        /* ---------- header ---------- */
+        .eyebrow {
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 246, 233, .08);
+            border: 1px solid rgba(232, 181, 77, .35);
+            padding: 7px 18px 7px 10px;
+            border-radius: 999px;
+            margin-top: 6px;
+        }
+
+        .eyebrow img {
+            height: 20px;
+           
+        }
+
+        .eyebrow span {
+            font-size: 12px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+
+        h1.headline {
+            z-index: 1;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            text-align: center;
+            font-size: clamp(30px, 6.4vw, 52px);
+            line-height: 1.05;
+            margin-top: 20px;
+            letter-spacing: -.01em;
+        }
+
+        h1.headline em {
+            font-style: italic;
+            font-weight: 500;
+            color: var(--gold-bright);
+        }
+
+        p.subhead {
+            z-index: 1;
+            text-align: center;
+            max-width: 460px;
+            margin: 14px auto 0;
+            color: var(--cream-dim);
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        /* ---------- wheel stage ---------- */
+        .stage {
+            z-index: 1;
+            position: relative;
+            margin-top: 44px;
+            width: min(88vw, 380px);
+            aspect-ratio: 1/1;
+        }
+
+        /* tassels either side, like a mauli thread */
+        .tassel {
+            position: absolute;
+            top: 46%;
+            width: 26px;
+            height: 120px;
+            z-index: 0;
+        }
+
+        .tassel.left {
+            left: -24px;
+            transform: rotate(-8deg);
+        }
+
+        .tassel.right {
+            right: -24px;
+            transform: rotate(8deg) scaleX(-1);
+        }
+
+        .tassel svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* pointer / rakhi charm at top */
+        .pointer {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .45));
+        }
+
+        .pointer .string {
+            width: 3px;
+            height: 14px;
+            background: var(--gold);
+        }
+
+        .pointer .charm {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--marigold) 70%);
+            border: 2px solid var(--gold-bright);
+            position: relative;
+        }
+
+        .pointer .charm::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            background: var(--maroon-deep);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .pointer .tip {
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 16px solid var(--gold-bright);
+            margin-top: -2px;
+        }
+
+        .wheel-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--gold-bright), var(--gold), var(--gold-bright), var(--gold), var(--gold-bright));
+            padding: 10px;
+            box-shadow:
+                0 0 0 3px rgba(232, 181, 77, .25),
+                0 22px 45px rgba(0, 0, 0, .5),
+                inset 0 0 20px rgba(0, 0, 0, .25);
+        }
+
+        .wheel-hub-outer {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--maroon-deep);
+            overflow: hidden;
+        }
+
+        #wheel {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transform: rotate(0deg);
+            will-change: transform;
+        }
+
+        .hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--marigold) 75%);
+            border: 3px solid var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 4;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--maroon-deep);
+            letter-spacing: .02em;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .4);
+            transition: transform .15s ease;
+            user-select: none;
+        }
+
+        .hub:active {
+            transform: translate(-50%, -50%) scale(.94);
+        }
+
+        .hub.disabled {
+            cursor: default;
+            filter: grayscale(.5) brightness(.8);
+        }
+
+        .hub:not(.disabled):hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .hint {
+            z-index: 1;
+            margin-top: 26px;
+            font-size: 13px;
+            color: var(--cream-dim);
+            text-align: center;
+            letter-spacing: .02em;
+        }
+
+        .hint b {
+            color: var(--gold-bright);
+        }
+
+        /* ---------- modal ---------- */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 4, 3, .72);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+            padding: 20px;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: linear-gradient(180deg, var(--maroon-light), var(--maroon) 60%, var(--maroon-deep));
+            border: 1px solid rgba(232, 181, 77, .4);
+            border-radius: 20px;
+            max-width: 360px;
+            width: 100%;
+            padding: 32px 26px 26px;
+            text-align: center;
+            position: relative;
+            transform: scale(.85) translateY(20px);
+            transition: transform .35s cubic-bezier(.2, .9, .3, 1.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, .5);
+        }
+
+        .overlay.show .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal .badge {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--marigold) 75%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .modal h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .modal p.prize {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 19px;
+            color: var(--gold-bright);
+            margin-bottom: 16px;
+        }
+
+        .modal .code {
+            background: rgba(255, 246, 233, .08);
+            border: 1px dashed rgba(232, 181, 77, .5);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            letter-spacing: .12em;
+            font-size: 15px;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .code button {
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--maroon-deep);
+            cursor: pointer;
+        }
+
+        .code button:hover {
+            background: var(--gold-bright);
+        }
+
+        .modal .note {
+            font-size: 12.5px;
+            color: var(--cream-dim);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .modal .close-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+            color: var(--maroon-deep);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            letter-spacing: .02em;
+        }
+
+        .modal .close-btn:hover {
+            filter: brightness(1.05);
+        }
+
+        footer {
+            z-index: 1;
+            margin-top: auto;
+            padding-top: 44px;
+            text-align: center;
+            font-size: 11px;
+            color: rgba(240, 223, 198, .55);
+            max-width: 340px;
+            line-height: 1.6;
+        }
+
+        footer a {
+            color: var(--gold-bright);
+            text-decoration: none;
+        }
+
+        /* confetti */
+        .confetti-piece {
+            position: fixed;
+            top: -10px;
+            width: 8px;
+            height: 14px;
+            z-index: 60;
+            opacity: .9;
+            pointer-events: none;
+            animation: confetti-fall 2.6s ease-in forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(600deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="eyebrow" style="display:none"></h1>
+
+    <div class="eyebrow">
+        <img src="https://www.tiffexx.com/brand/tiffexx-logo.png" alt="Tiffexx">
+        <span>Rakshabandhan Special</span>
+    </div>
+
+    <h1 class="headline">Spin the <em>Rakhi Wheel</em><br>& treat your tiffin family</h1>
+    <p class="subhead">One spin, one surprise. Every ribbon on this wheel unlocks a Rakshabandhan reward on your next
+        Tiffexx order.</p>
+
+    <div class="stage">
+        <div class="tassel left">
+            <svg viewBox="0 0 26 120">
+                <line x1="13" y1="0" x2="13" y2="70" stroke="#e8b54d" stroke-width="2" />
+                <circle cx="13" cy="78" r="7" fill="#c1272d" />
+                <line x1="6" y1="85" x2="4" y2="118" stroke="#e8b54d" stroke-width="2" />
+                <line x1="13" y1="85" x2="13" y2="118" stroke="#e8b54d" stroke-width="2" />
+                <line x1="20" y1="85" x2="22" y2="118" stroke="#e8b54d" stroke-width="2" />
+            </svg>
+        </div>
+        <div class="tassel right">
+            <svg viewBox="0 0 26 120">
+                <line x1="13" y1="0" x2="13" y2="70" stroke="#e8b54d" stroke-width="2" />
+                <circle cx="13" cy="78" r="7" fill="#c1272d" />
+                <line x1="6" y1="85" x2="4" y2="118" stroke="#e8b54d" stroke-width="2" />
+                <line x1="13" y1="85" x2="13" y2="118" stroke="#e8b54d" stroke-width="2" />
+                <line x1="20" y1="85" x2="22" y2="118" stroke="#e8b54d" stroke-width="2" />
+            </svg>
+        </div>
+
+        <div class="pointer">
+            <div class="charm"></div>
+            <div class="string"></div>
+            <div class="tip"></div>
+        </div>
+
+        <div class="wheel-ring">
+            <div class="wheel-hub-outer">
+                <svg id="wheel" viewBox="0 0 400 400"></svg>
+            </div>
+        </div>
+
+        <div class="hub" id="spinBtn">SPIN</div>
+    </div>
+
+    <p class="hint">One spin per visitor &middot; <b>Tap the centre</b> to try your luck</p>
+
+    <footer>
+        Valid on orders placed via Tiffexx between 22–29 Aug 2026. One reward per customer, not combinable with other
+        offers. See <a href="https://www.tiffexx.com/" target="_blank" rel="noopener">tiffexx.com</a> for full terms.
+    </footer>
+
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <div class="badge" id="modalIcon">🎁</div>
+            <h2>Happy Rakshabandhan!</h2>
+            <p class="prize" id="prizeText">You won 10% off</p>
+            <div class="code">
+                <span id="codeText">TIFFEXX-RAKHI</span>
+                <button id="copyBtn">Copy</button>
+            </div>
+            <p class="note">Screenshot this code and apply it at checkout on the Tiffexx app before 29 Aug 2026.</p>
+            <button class="close-btn" id="closeModal">Sweet, thank you!</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            // ---------- floating marigold petals ----------
+            const petalCount = 14;
+            for (let i = 0; i < petalCount; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.style.left = (Math.random() * 100) + 'vw';
+                p.style.animationDuration = (9 + Math.random() * 8) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                p.style.width = p.style.height = (8 + Math.random() * 10) + 'px';
+                p.style.background = Math.random() > 0.5 ? 'var(--marigold)' : 'var(--gold)';
+                document.body.appendChild(p);
+            }
+
+            // ---------- wheel data ----------
+            const prizes = [
+                { label: '10% OFF', weight: 20, code: 'RAKHI10', desc: 'You won 10% off your order' },
+                { label: 'FREE DELIVERY', weight: 16, code: 'RAKHIFREEDEL', desc: 'You won free delivery' },
+                { label: '20% OFF', weight: 8, code: 'RAKHI20', desc: 'You won 20% off your order' },
+                { label: 'FREE DESSERT', weight: 16, code: 'RAKHISWEET', desc: 'You won a free dessert' },
+                { label: '5% OFF', weight: 20, code: 'RAKHI5', desc: 'You won 5% off your order' },
+                { label: 'BUY 1 GET 1', weight: 5, code: 'RAKHIBOGO', desc: 'You won Buy 1 Get 1 on your tiffin' },
+                { label: 'FREE RAKHI THALI', weight: 5, code: 'RAKHITHALI', desc: 'You won a free Rakhi thali' },
+                { label: 'TRY NEXT TIME', weight: 10, code: '', desc: 'No luck this time' },
+            ];
+
+            const colors = ['#4a1410', '#e8b54d'];
+            const textColors = ['#fff6e9', '#4a1410'];
+
+            const svg = document.getElementById('wheel');
+            const R = 200, CX = 200, CY = 200;
+            const n = prizes.length;
+            const seg = 360 / n;
+
+            function polar(cx, cy, r, angleDeg) {
+                const a = (angleDeg - 90) * Math.PI / 180;
+                return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+            }
+
+            const ns = 'http://www.w3.org/2000/svg';
+
+            for (let i = 0; i < n; i++) {
+                const startAngle = i * seg;
+                const endAngle = startAngle + seg;
+                const [x1, y1] = polar(CX, CY, R, startAngle);
+                const [x2, y2] = polar(CX, CY, R, endAngle);
+                const largeArc = seg > 180 ? 1 : 0;
+
+                const path = document.createElementNS(ns, 'path');
+                const d = `M ${CX} ${CY} L ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+                path.setAttribute('d', d);
+                path.setAttribute('fill', colors[i % 2]);
+                path.setAttribute('stroke', '#e8b54d');
+                path.setAttribute('stroke-width', '1.5');
+                svg.appendChild(path);
+
+                // label
+                const midAngle = startAngle + seg / 2;
+                const [lx, ly] = polar(CX, CY, R * 0.62, midAngle);
+                const text = document.createElementNS(ns, 'text');
+                text.setAttribute('x', lx);
+                text.setAttribute('y', ly);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('fill', textColors[i % 2]);
+                text.setAttribute('font-family', "'Poppins', sans-serif");
+                text.setAttribute('font-weight', '700');
+                text.setAttribute('font-size', prizes[i].label.length > 10 ? '13' : '15');
+                text.setAttribute('transform', `rotate(${midAngle}, ${lx}, ${ly})`);
+
+                const words = prizes[i].label.split(' ');
+                words.forEach((w, wi) => {
+                    const tspan = document.createElementNS(ns, 'tspan');
+                    tspan.textContent = w;
+                    tspan.setAttribute('x', lx);
+                    tspan.setAttribute('dy', wi === 0 ? (- (words.length - 1) * 7) : 14);
+                    text.appendChild(tspan);
+                });
+                svg.appendChild(text);
+            }
+
+            // ---------- spin logic ----------
+            let hasSpun = false;
+            let currentRotation = 0;
+            const spinBtn = document.getElementById('spinBtn');
+            const overlay = document.getElementById('overlay');
+            const prizeText = document.getElementById('prizeText');
+            const codeText = document.getElementById('codeText');
+            const codeRow = document.getElementById('codeText').closest('.code');
+            const modalIcon = document.getElementById('modalIcon');
+            const copyBtn = document.getElementById('copyBtn');
+            const closeModal = document.getElementById('closeModal');
+
+            function weightedPick() {
+                const total = prizes.reduce((s, p) => s + p.weight, 0);
+                let r = Math.random() * total;
+                for (const p of prizes) {
+                    if (r < p.weight) return p;
+                    r -= p.weight;
+                }
+                return prizes[0];
+            }
+
+            function launchConfetti() {
+                const colorsC = ['#e8b54d', '#c1272d', '#e8641c', '#fff6e9'];
+                for (let i = 0; i < 50; i++) {
+                    const c = document.createElement('div');
+                    c.className = 'confetti-piece';
+                    c.style.left = Math.random() * 100 + 'vw';
+                    c.style.background = colorsC[Math.floor(Math.random() * colorsC.length)];
+                    c.style.animationDelay = (Math.random() * 0.4) + 's';
+                    c.style.animationDuration = (2 + Math.random() * 1.2) + 's';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4000);
+                }
+            }
+
+            function openModal(prize) {
+                modalIcon.textContent = prize.code ? '🎁' : '🙏';
+                prizeText.textContent = prize.desc;
+                if (prize.code) {
+                    codeText.textContent = prize.code;
+                    codeRow.style.display = 'flex';
+                } else {
+                    codeRow.style.display = 'none';
+                }
+                overlay.classList.add('show');
+                if (prize.code) launchConfetti();
+            }
+
+            spinBtn.addEventListener('click', () => {
+                if (hasSpun) return;
+                hasSpun = true;
+                spinBtn.classList.add('disabled');
+                spinBtn.textContent = '...';
+
+                const prize = weightedPick();
+                const index = prizes.indexOf(prize);
+                const segCenter = index * seg + seg / 2;
+                // We want the pointer (fixed at top, 0deg) to land on segCenter.
+                // Wheel rotates clockwise; target rotation so that segCenter aligns to 0deg (top).
+                const fullSpins = 6 * 360;
+                const randomJitter = (Math.random() - 0.5) * (seg * 0.6);
+                const target = fullSpins + (360 - segCenter) + randomJitter;
+
+                currentRotation += target;
+                svg.style.transition = 'transform 4.2s cubic-bezier(.17,.67,.14,1)';
+                svg.style.transform = `rotate(${currentRotation}deg)`;
+
+                setTimeout(() => {
+                    openModal(prize);
+                    spinBtn.textContent = 'SPUN';
+                }, 4300);
+            });
+
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard?.writeText(codeText.textContent).then(() => {
+                    copyBtn.textContent = 'Copied';
+                    setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                overlay.classList.remove('show');
+            });
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('show');
+            });
+        })();
+    </script>
+
+</body>
+
+</html>
